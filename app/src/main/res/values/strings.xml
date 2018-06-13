@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">InSystemTask</string>
+    <string name="activity_empty">Пожалуйста, добавьте картинку в приложение</string>
+    <string name="alert_explanation">добавьте хэштеги через запятую. Например: вечер, закат, прогулка</string>
+</resources>
