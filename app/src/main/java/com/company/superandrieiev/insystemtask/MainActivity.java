@@ -7,8 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Связываемся с нашим ImageView:
-        imageView = (ImageView)findViewById(R.id.imageView);
+        imageView = (ImageView) findViewById(R.id.imageView);
 
         //Связываемся с нашей кнопкой Button:
         Button PickImage = (Button) findViewById(R.id.add_picture_but);
@@ -55,9 +53,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
 
-        switch(requestCode) {
+        switch (requestCode) {
             case Pick_image:
-                if(resultCode == RESULT_OK){
+                if (resultCode == RESULT_OK) {
                     try {
 
                         //Получаем URI изображения, преобразуем его в Bitmap
@@ -67,42 +65,38 @@ public class MainActivity extends AppCompatActivity {
                         final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
                         //создаем алерт с выбранным изображением
-                        AlertDialog.Builder addImageDialog = new AlertDialog.Builder(this);
+                        final AlertDialog.Builder addImageDialog = new AlertDialog.Builder(this);
                         View view = getLayoutInflater().inflate(R.layout.add_image_alert, null);
                         ImageView image = view.findViewById(R.id.imageView);
                         image.setImageBitmap(selectedImage);
-                        EditText edit_text_view = view.findViewById(R.id.edit_text_view);
+                        final EditText edit_text_view = view.findViewById(R.id.edit_text_view);
                         final Button alertButton = view.findViewById(R.id.add_picture_but);
-                        edit_text_view.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                if (s)
-                                alertButton.setEnabled(true);
-                                else 
-                                alertButton.setEnabled(false);
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable editable) {}
-
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-                        });
-
+                        addImageDialog.setView(view);
+                        final AlertDialog ad = addImageDialog.show();
                         alertButton.setOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
+                                String userTags = edit_text_view.getText().toString();
+                                String tags = "";
+                                String[] arr = userTags.split(",");
+                                for (int i = 0; i < arr.length; i++) {
+                                    String tag = arr[i].trim();
+                                    if (!tag.contains(" ") && !tag.isEmpty()) {
+                                        tags += arr[i] + ", ";
+                                    }
+                                }
+                                tags = tags.substring(0, tags.length() - 2);
+                                if (tags.length() > 0) {
+                                    ad.dismiss();
+                                }
                             }
                         });
-
-                        addImageDialog.setView(view);
-                        addImageDialog.show();
-
 
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
                 }
-        }}
+        }
+
+    }
 }
