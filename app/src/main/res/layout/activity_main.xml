@@ -6,7 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.company.superandrieiev.insystemtask.MainActivity">
 
-    <TextView
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/add_picture_but"
+        />
+
+
+    <!--<TextView
         android:id="@+id/text_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,7 +23,7 @@
         android:layout_marginTop="220dp"
         android:gravity="center"
         android:text="@string/activity_empty"
-        android:textSize="20sp" />
+        android:textSize="20sp" />-->
 
     <Button
         android:id="@+id/add_picture_but"
