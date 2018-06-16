@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private ArrayList<ImageWithTag> imageWithTagsList;
     private RecyclerAdapter recyclerAdapter;
+
+    SearchView sv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-
                 //Вызываем стандартную галерею для выбора изображения с помощью Intent.ACTION_PICK:
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
                 //Тип получаемых объектов - image:
@@ -75,9 +77,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sv = (SearchView) findViewById(R.id.search_view);
+
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                //FILTER AS YOU TYPE
+                recyclerAdapter.getFilter().filter(query);
+                return false;
+            }
+        });
+
         databaseHelper = new DatabaseHelper(this);
         getDataFromSQLite();
-        int i = 0;
     }
 
     //Обрабатываем результат выбора в галерее:

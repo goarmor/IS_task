@@ -6,12 +6,12 @@
     android:layout_height="match_parent"
     tools:context="com.company.superandrieiev.insystemtask.MainActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <android.support.v7.widget.SearchView
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/add_picture_but"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_height="40dp"
+        app:defaultQueryHint="Search.."/>
 
 
     <!--<TextView
@@ -25,11 +25,18 @@
         android:text="@string/activity_empty"
         android:textSize="20sp" />-->
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/add_picture_but"
+        android:layout_below="@+id/search_view" />
+
     <Button
         android:id="@+id/add_picture_but"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:text="ДОБАВИТЬ КАРТИНКУ"/>
+        android:text="ДОБАВИТЬ КАРТИНКУ" />
 
 </RelativeLayout>
