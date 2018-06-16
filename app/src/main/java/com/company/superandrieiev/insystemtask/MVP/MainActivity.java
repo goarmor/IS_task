@@ -1,42 +1,41 @@
-package com.company.superandrieiev.insystemtask;
+package com.company.superandrieiev.insystemtask.MVP;
 
 import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.company.superandrieiev.insystemtask.R;
 import com.company.superandrieiev.insystemtask.adapter.RecyclerAdapter;
 import com.company.superandrieiev.insystemtask.model.ImageWithTag;
-import com.company.superandrieiev.insystemtask.sql.DatabaseHelper;
+import com.hannesdorfmann.mosby.mvp.MvpActivity;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView {
 
     private ImageView imageView;
     private RecyclerView recyclerView;
     private final int Pick_image = 1;
-    private DatabaseHelper databaseHelper;
     private ArrayList<ImageWithTag> imageWithTagsList;
     private RecyclerAdapter recyclerAdapter;
+    private AlertDialog alertDialog;
 
     SearchView sv;
 
@@ -62,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
 
         //Связываемся с нашей кнопкой Button:
-        Button PickImage = (Button) findViewById(R.id.add_picture_but);
+        Button pickImage = (Button) findViewById(R.id.add_picture_but);
         //Настраиваем для нее обработчик нажатий OnClickListener:
-        PickImage.setOnClickListener(new OnClickListener() {
+        pickImage.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -93,8 +92,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        databaseHelper = new DatabaseHelper(this);
-        getDataFromSQLite();
+        getPresenter().setActualImagesWithTag();
+    }
+
+    @NonNull
+    @Override
+    public MainPresenter createPresenter() {
+        return new MainPresenter(this);
     }
 
     //Обрабатываем результат выбора в галерее:
@@ -118,28 +122,13 @@ public class MainActivity extends AppCompatActivity {
                         ImageView image = (ImageView)view.findViewById(R.id.imageView);
                         image.setImageBitmap(selectedImage);
                         final EditText edit_text_view = (EditText)view.findViewById(R.id.edit_text_view);
-                        final Button alertButton = (Button)view.findViewById(R.id.add_picture_but);
+                        final Button alertButton = (Button)view.findViewById(R.id.add_picture_alert_but);
                         addImageDialog.setView(view);
-                        final AlertDialog ad = addImageDialog.show();
-                        alertButton.setOnClickListener(new OnClickListener() {
+                        alertDialog = addImageDialog.show();
+                        alertButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                String userTags = edit_text_view.getText().toString();
-                                String tags = "";
-                                String[] arr = userTags.split(",");
-                                for (int i = 0; i < arr.length; i++) {
-                                    String tag = arr[i].trim();
-                                    if (!tag.contains(" ") && !tag.isEmpty()) {
-                                        tags += arr[i] + ", ";
-                                    }
-                                }
-                                tags = tags.substring(0, tags.length() - 2);
-                                if (tags.length() > 0) {
-                                    postDataToSQLite(imageUri, tags);
-                                    getDataFromSQLite();
-
-                                    ad.dismiss();
-                                }
+                                getPresenter().addImageWithTag(edit_text_view.getText().toString(), imageUri);
                             }
                         });
 
@@ -151,28 +140,23 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void getDataFromSQLite() {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                imageWithTagsList.clear();
-                imageWithTagsList.addAll(databaseHelper.getAllRecords());
 
-                return null;
-            }
 
-            @Override
-            protected void onPostExecute(Void aVoid) {
-                super.onPostExecute(aVoid);
-                recyclerAdapter.notifyDataSetChanged();
-            }
-        }.execute();
+    @Override
+    public void showImageSelection() {
+
     }
 
-    private void postDataToSQLite(Uri imageURI, String tags) {
-        ImageWithTag imageWithTag = new ImageWithTag();
-        imageWithTag.setImageURI(imageURI);
-        imageWithTag.setTags(tags);
-        databaseHelper.addRecord(imageWithTag);
+    @Override
+    public void closeAlertDialog() {
+        if(alertDialog != null)
+        alertDialog.dismiss();
+    }
+
+    @Override
+    public void showActualImagesWithTags(ArrayList<ImageWithTag> imagesWithTags) {
+        imagesWithTags.clear();
+        imageWithTagsList.addAll(imagesWithTags);
+        recyclerAdapter.notifyDataSetChanged();
     }
 }

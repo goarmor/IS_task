@@ -16,7 +16,7 @@ public class CustomFilter extends Filter {
     RecyclerAdapter adapter;
     ArrayList<ImageWithTag> filterList;
 
-    
+
     public CustomFilter(ArrayList<ImageWithTag> filterList, RecyclerAdapter adapter)
     {
         this.adapter=adapter;
