@@ -1,10 +1,12 @@
 package com.company.superandrieiev.insystemtask.MVP;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.company.superandrieiev.insystemtask.R;
 import com.company.superandrieiev.insystemtask.adapter.RecyclerAdapter;
@@ -26,24 +29,21 @@ import java.util.ArrayList;
 
 public class MainActivity extends MvpActivity<MainView, MainPresenter> implements MainView {
 
-    private ImageView imageView;
     private RecyclerView recyclerView;
     private final int Pick_image = 1;
     private SearchView sv;
     private Button pickImage;
+    private TextView emptyText;
     private ArrayList<ImageWithTag> imageWithTagsList;
     private RecyclerAdapter recyclerAdapter;
     private AlertDialog alertDialog;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imageView = (ImageView) findViewById(R.id.imageView);
-
+        emptyText = (TextView) findViewById(R.id.text_empty);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         imageWithTagsList = new ArrayList<>();
         recyclerAdapter = new RecyclerAdapter(imageWithTagsList, this);
@@ -52,9 +52,6 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(recyclerAdapter);
 
-        //ActivityCompat.requestPermissions(MainActivity.this,
-          //      new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
-
         pickImage = (Button) findViewById(R.id.add_picture_but);
         pickImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,6 +59,9 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 getPresenter().startImagePick();
             }
         });
+
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
 
         sv = (SearchView) findViewById(R.id.search_view);
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -114,12 +114,19 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
 
     @Override
     public void closeAlertDialog() {
-        if(alertDialog != null)
         alertDialog.dismiss();
     }
 
     @Override
     public void showActualImagesWithTags(ArrayList<ImageWithTag> imagesWithTags) {
+        if (imagesWithTags.size() == 0) {
+            emptyText.setVisibility(View.VISIBLE);
+            sv.setVisibility(View.GONE);
+        } else {
+            emptyText.setVisibility(View.INVISIBLE);
+            sv.setVisibility(View.VISIBLE);
+        }
+
         imageWithTagsList.clear();
         imageWithTagsList.addAll(imagesWithTags);
         recyclerAdapter.notifyDataSetChanged();

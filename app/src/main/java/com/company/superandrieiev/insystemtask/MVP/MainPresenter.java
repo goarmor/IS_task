@@ -30,22 +30,23 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
     }
 
     public void addImageWithTag(String alertTags, Uri imageUri) {
-        String userTags = alertTags;
-        String tags = "";
-        String[] arr = userTags.split(",");
-        for (int i = 0; i < arr.length; i++) {
-            String tag = arr[i].trim();
-            if (!tag.contains(" ") && !tag.isEmpty()) {
-                tags += arr[i] + ", ";
+            String userTags = alertTags;
+            String tags = "";
+            String[] arr = userTags.split(",");
+            for (int i = 0; i < arr.length; i++) {
+                String tag = arr[i].trim();
+                if (!tag.contains(" ") && !tag.isEmpty()) {
+                    tags += tag + ", ";
+                }
             }
-        }
-        tags = tags.substring(0, tags.length() - 2);
-        if (tags.length() > 0) {
-            postDataToSQLite(imageUri, tags);
-            getDataFromSQLite();
 
-            getView().closeAlertDialog();
-        }
+            if (!tags.isEmpty()) {
+                tags = tags.substring(0, tags.length() - 2);
+                postDataToSQLite(imageUri, tags);
+                getDataFromSQLite();
+
+                getView().closeAlertDialog();
+            }
     }
 
     public void setActualImagesWithTag() {

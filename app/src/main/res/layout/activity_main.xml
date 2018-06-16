@@ -14,7 +14,7 @@
         app:defaultQueryHint="Search.."/>
 
 
-    <!--<TextView
+    <TextView
         android:id="@+id/text_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:layout_marginTop="220dp"
         android:gravity="center"
         android:text="@string/activity_empty"
-        android:textSize="20sp" />-->
+        android:textSize="20sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view"

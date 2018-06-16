@@ -25,5 +25,4 @@ public interface MainView extends MvpView {
 
     void showAlertDialog(Bitmap selectedImage, final Uri imageUri);
 
-
 }
