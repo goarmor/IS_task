@@ -12,7 +12,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.company.superandrieiev.insystemtask.Filter.CustomFilter;
+import com.company.superandrieiev.insystemtask.filter.CustomFilter;
 import com.company.superandrieiev.insystemtask.R;
 import com.company.superandrieiev.insystemtask.model.ImageWithTag;
 
@@ -30,12 +30,12 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.Image
     private Context mContext;
     CustomFilter filter;
 
-
     public RecyclerAdapter(ArrayList<ImageWithTag> recordsList, Context mContext) {
         this.listImageWithTag = recordsList;
         this.filterListImageWithTag = recordsList;
         this.mContext = mContext;
     }
+
 
     @Override
     public Filter getFilter() {
@@ -46,6 +46,7 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.Image
 
         return filter;
     }
+
 
     public class ImageWithTagViewHolder extends RecyclerView.ViewHolder {
         public ImageView image;
@@ -58,12 +59,14 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.Image
         }
     }
 
+
     @Override
     public ImageWithTagViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.image_with_tag_recyclerview_item, parent, false);
         return new ImageWithTagViewHolder(itemView);
     }
+
 
     @Override
     public void onBindViewHolder(final ImageWithTagViewHolder holder, int position) {
@@ -79,14 +82,17 @@ public class RecyclerAdapter  extends RecyclerView.Adapter<RecyclerAdapter.Image
         }
     }
 
+
     @Override
     public int getItemCount() {
         return listImageWithTag.size();
     }
 
+
     public ArrayList<ImageWithTag> getFilterListImageWithTag() {
         return filterListImageWithTag;
     }
+
 
     public void setListImageWithTag(ArrayList<ImageWithTag> listImageWithTag) {
         this.listImageWithTag = listImageWithTag;

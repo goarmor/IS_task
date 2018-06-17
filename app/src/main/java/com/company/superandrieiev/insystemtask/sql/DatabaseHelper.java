@@ -3,7 +3,6 @@ package com.company.superandrieiev.insystemtask.sql;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
@@ -35,18 +34,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-
-    public DatabaseHelper open() throws SQLException
-    {
-        db = DBHelper.getWritableDatabase();
-        return this;
-    }
-
-    public void close()
-    {
-        DBHelper.close();
     }
 
     @Override

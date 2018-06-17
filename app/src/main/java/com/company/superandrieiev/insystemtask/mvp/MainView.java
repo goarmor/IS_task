@@ -1,4 +1,4 @@
-package com.company.superandrieiev.insystemtask.MVP;
+package com.company.superandrieiev.insystemtask.mvp;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

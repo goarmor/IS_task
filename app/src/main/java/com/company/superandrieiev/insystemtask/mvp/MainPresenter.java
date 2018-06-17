@@ -1,4 +1,4 @@
-package com.company.superandrieiev.insystemtask.MVP;
+package com.company.superandrieiev.insystemtask.mvp;
 
 import android.content.Context;
 import android.content.Intent;
@@ -24,10 +24,12 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
     private DatabaseHelper databaseHelper;
     private Context context;
 
+
     public MainPresenter(Context context) {
         this.context = context;
         databaseHelper = new DatabaseHelper(context);
     }
+
 
     public void addImageWithTag(String alertTags, Uri imageUri) {
             String userTags = alertTags;
@@ -49,9 +51,11 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
             }
     }
 
+
     public void setActualImagesWithTag() {
         getDataFromSQLite();
     }
+
 
     public void startImagePick () {
         //Вызываем стандартную галерею для выбора изображения с помощью Intent.ACTION_PICK:
@@ -62,9 +66,9 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
         getView().showImageSelection(photoPickerIntent, 1);
     }
 
-    public void listFiltering(String query) {
-        getView().showFiltratedList(query);
-    }
+
+    public void listFiltering(String query) { getView().showFiltratedList(query); }
+
 
     public void convertUriToBitmap(Intent imageReturnedIntent) throws FileNotFoundException {
         Uri imageUri = imageReturnedIntent.getData();
@@ -73,12 +77,14 @@ public class MainPresenter extends MvpBasePresenter<MainView> {
         getView().showAlertDialog(selectedImage, imageUri);
     }
 
+
     private void postDataToSQLite(Uri imageURI, String tags) {
         ImageWithTag imageWithTag = new ImageWithTag();
         imageWithTag.setImageURI(imageURI);
         imageWithTag.setTags(tags);
         databaseHelper.addRecord(imageWithTag);
     }
+
 
     private void getDataFromSQLite() {
         new AsyncTask<Void, Void, ArrayList<ImageWithTag>>() {

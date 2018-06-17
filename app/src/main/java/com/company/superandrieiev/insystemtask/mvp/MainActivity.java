@@ -1,4 +1,4 @@
-package com.company.superandrieiev.insystemtask.MVP;
+package com.company.superandrieiev.insystemtask.mvp;
 
 import android.Manifest;
 import android.content.Intent;
@@ -38,6 +38,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
     private RecyclerAdapter recyclerAdapter;
     private AlertDialog alertDialog;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +65,7 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
                 new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},1);
 
         sv = (SearchView) findViewById(R.id.search_view);
+
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -81,11 +83,13 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         getPresenter().setActualImagesWithTag();
     }
 
+
     @NonNull
     @Override
     public MainPresenter createPresenter() {
         return new MainPresenter(this);
     }
+
 
     //Обрабатываем результат выбора в галерее:
     @Override
@@ -112,10 +116,12 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         startActivityForResult(photoPickerIntent, pick_image);
     }
 
+
     @Override
     public void closeAlertDialog() {
         alertDialog.dismiss();
     }
+
 
     @Override
     public void showActualImagesWithTags(ArrayList<ImageWithTag> imagesWithTags) {
@@ -132,10 +138,12 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         recyclerAdapter.notifyDataSetChanged();
     }
 
+
     @Override
     public void showFiltratedList(String query) {
         recyclerAdapter.getFilter().filter(query);
     }
+
 
     @Override
     public void showAlertDialog(Bitmap selectedImage, final Uri imageUri) {
@@ -143,10 +151,13 @@ public class MainActivity extends MvpActivity<MainView, MainPresenter> implement
         View view = getLayoutInflater().inflate(R.layout.add_image_alert, null);
         ImageView image = (ImageView)view.findViewById(R.id.imageView);
         image.setImageBitmap(selectedImage);
+
         final EditText edit_text_view = (EditText)view.findViewById(R.id.edit_text_view);
         final Button alertButton = (Button)view.findViewById(R.id.add_picture_alert_but);
+
         addImageDialog.setView(view);
         alertDialog = addImageDialog.show();
+
         alertButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

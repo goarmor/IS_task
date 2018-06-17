@@ -1,4 +1,4 @@
-package com.company.superandrieiev.insystemtask.Filter;
+package com.company.superandrieiev.insystemtask.filter;
 
 import android.widget.Filter;
 
@@ -62,6 +62,7 @@ public class CustomFilter extends Filter {
         }
         return results;
     }
+
 
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
